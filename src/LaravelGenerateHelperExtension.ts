@@ -3,6 +3,7 @@ import { getClassNameFromCode } from './PhpParser';
 import { exec } from 'child_process';
 import { ExecOptions } from 'child_process';
 import path = require('path');
+import { getConfiguration } from './configuration';
 
 const shellescape = require('shell-escape');
 
@@ -45,7 +46,9 @@ export class LaravelGenerateHelperExtension {
 			return;
         }
 
-        this.runCommand("./vendor/bin/sail artisan ide-helper:models", ["-W", className]);
+        const args = getConfiguration().get<string>('ide-helper-args') ?? "";
+
+        this.runArtisanCommand("ide-helper:models", ["-W", className, args]);
     }
 
     public runGenerateFormRequestPhpDoc() {
@@ -55,14 +58,17 @@ export class LaravelGenerateHelperExtension {
 			return;
 		}
 
+        const args = getConfiguration().get<string>('generate-form-request-phpdoc-args') ?? "";
+
         const fileName = activeEditor.document.fileName;
         const relative = this.getWorkspaceRelativePath(fileName);
-        this.runCommand("./vendor/bin/sail artisan form-request:generate", [relative]);
+        this.runArtisanCommand("form-request:generate", [relative, args]);
     }
 
 
-    private runCommand(command: string, args: string[] = []) {
-        const cmd = command + ' ' +  shellescape(args);
+    private runArtisanCommand(command: string, args: string[] = []) {
+        const artisanCommand = getConfiguration().get<string>('artisan-command') ?? "";
+        const cmd = `${artisanCommand} ${command} ${shellescape(args)}`;
 
         const options: ExecOptions = { };
         //コマンドを実行する際のカレントディレクトリをプロジェクトのルートに設定する

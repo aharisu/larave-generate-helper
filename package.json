@@ -3,6 +3,10 @@
   "displayName": "laravel-generate-helper",
   "description": "",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/aharisu/larave-generate-helper.git"
+  },
   "engines": {
     "vscode": "^1.77.0"
   },
@@ -13,6 +17,33 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Extension Configuration",
+      "properties": {
+        "laravel-generate-helper.ide-helper-args": {
+          "type": "string",
+          "default": "",
+          "description": "Arguments to Laravel IDE Helper"
+        },
+        "laravel-generate-helper.generate-form-request-phpdoc-args": {
+          "type": "string",
+          "default": "",
+          "description": "Arguments to Generate FormRequest PHPDoc",
+          "examples": [
+            "--write"
+          ]
+        },
+        "laravel-generate-helper.artisan-command": {
+          "type": "string",
+          "default": "php artisan",
+          "description": "Laravel artisan command",
+          "examples": [
+            "php artisan",
+            "./vendor/bin/sail artisan"
+          ]
+        }
+      }
+    },
     "commands": [
       {
         "command": "laravel-generate-helper.generateModelHelper",

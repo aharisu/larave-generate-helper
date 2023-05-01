@@ -48,7 +48,7 @@ export class LaravelGenerateHelperExtension {
 
         const args = getConfiguration().get<string>('ide-helper-args') ?? "";
 
-        this.runArtisanCommand("ide-helper:models", ["-W", className, args]);
+        this.runArtisanCommand("ide-helper:models", [className, args]);
     }
 
     public runGenerateFormRequestPhpDoc() {

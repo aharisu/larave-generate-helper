@@ -2,7 +2,7 @@
   "name": "laravel-generate-helper",
   "displayName": "laravel-generate-helper",
   "description": "",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/aharisu/larave-generate-helper.git"
@@ -45,6 +45,10 @@
       }
     },
     "commands": [
+      {
+        "command": "laravel-generate-helper.generate",
+        "title": "Generate: Model/FormRequest helper"
+      },
       {
         "command": "laravel-generate-helper.generateModelHelper",
         "title": "Generate: Model helper"

@@ -4,13 +4,16 @@ import { Namespace } from "php-parser";
 import { Node } from "php-parser";
 import { Engine } from "php-parser";
 
+export function getExtendsClassNameFromCode(code: string): string | null {
+    const parser = makeParser();
+    const ast = parser.parseCode(code, "unknown");
+
+    const classNode = findNodeByKind<Class>(ast, 'class');
+    return classNode?.extends?.name ?? null;
+}
+
 export function getClassNameFromCode(code: string): string | null {
-    const parser = new Engine({
-        parser: {
-            extractDoc: false,
-            php7: true,
-        },
-    });
+    const parser = makeParser();
 
     const ast = parser.parseCode(code, "unknown");
     const namespaceNode = findNodeByKind<Namespace>(ast,'namespace');
@@ -25,6 +28,15 @@ export function getClassNameFromCode(code: string): string | null {
     }
 
     return null;
+}
+
+function makeParser() {
+    return new Engine({
+        parser: {
+            extractDoc: false,
+            php7: true,
+        },
+    });
 }
 
 function findNodeByKind<T extends Node>(ast: Node, kind: string): T | null {

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { getClassNameFromCode } from './PhpParser';
+import { getClassNameFromCode, getExtendsClassNameFromCode } from './PhpParser';
 import { exec } from 'child_process';
 import { ExecOptions } from 'child_process';
 import path = require('path');
@@ -31,6 +31,29 @@ export class LaravelGenerateHelperExtension {
             vscode.window.showErrorMessage(message);
         } else {
             vscode.window.showInformationMessage(message);
+        }
+    }
+
+    public runGenerate() {
+		const activeEditor = vscode.window.activeTextEditor;
+		if(!activeEditor) {
+            this.showInformationMessage('No active editor', 'error');
+			return;
+		}
+
+        const code = activeEditor.document.getText();
+        const extendsClassName = getExtendsClassNameFromCode(code);
+        if (extendsClassName === null) {
+            this.showInformationMessage('PHP extends class name not found', 'error');
+            return;
+        }
+
+        if (extendsClassName.includes("Request")) {
+            this.runGenerateFormRequestPhpDoc();
+        } else if(extendsClassName.includes("Model")) {
+            this.runLaravelIdeHelperModel();
+        } else {
+            this.showInformationMessage('unknown file', 'error');
         }
     }
 
